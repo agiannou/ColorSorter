@@ -1,3 +1,11 @@
+/** @file main.cpp
+ *    This is the main file for the color sorter project for ME 507.
+ * 
+ * @author Alexander Giannousis, Ali Yazdkhasti, Raul Gonzalez
+ * @date   2020-Nov-16 Created file
+ */
+
+
 #include <Arduino.h>
 #include <PrintStream.h>
 #include <Stepper.h>
