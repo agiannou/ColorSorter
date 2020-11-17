@@ -11,7 +11,7 @@
 #include <Stepper.h>
 #include "Adafruit_TCS34725.h"
 
-// test to see if upload to GitHub works
+
 
 void setup() {
   // put your setup code here, to run once:
