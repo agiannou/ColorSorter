@@ -37,8 +37,10 @@ const int8_t Bin1 = PA8;
 
 //  set PWMA and PWMB to VCC 
 
+// setting the up the stepper number of stepper motor steps
 const int8_t STEPS_PER_REV = 200;
 
+// setting up the input pins for the motor driver
 Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
 
 void solenoid (void* p_params)
@@ -49,6 +51,7 @@ void solenoid (void* p_params)
 void steppermotor (void* p_params)
 {
   (void)p_params;            // Does nothing but shut up a compiler warning
+  myStepper.setSpeed(60);
 }
 
 void setup() {
