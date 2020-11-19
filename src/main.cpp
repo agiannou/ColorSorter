@@ -97,8 +97,9 @@ void steppermotor (void* p_params)
     // It will be used to run the task at precise intervals
     TickType_t xLastWakeTime = xTaskGetTickCount();
 
-    //init variable to pull from share
+    // init variable to pull from share and init share as off
     bool sol_on;
+    solenoid_on.put(false);
 
     for(;;)
     {
