@@ -42,10 +42,7 @@ const int8_t Bin1 = PA8;
 // solenoid pins
 const int8_t Ain_sol = PB6;
 
-//  set PWMA and PWMB to VCC 
-
-
-// setting the up the stepper number of stepper motor steps
+// setting the up the number of stepper motor steps
 const int8_t STEPS_PER_REV = 200;
 
 // setting up the input pins for the motor driver
