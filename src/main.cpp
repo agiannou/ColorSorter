@@ -108,6 +108,7 @@ void steppermotor (void* p_params)
       if (sol_on == false)
       {
         myStepper.step(STEPS_PER_REV);
+        delay(1000);
         solenoid_on.put(true);
       }
             // Delay task by 10 ms since task began
