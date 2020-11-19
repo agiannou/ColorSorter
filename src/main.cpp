@@ -52,7 +52,7 @@ void steppermotor (void* p_params)
 {
   Serial << "Now initializing stepper task" << endl;
   (void)p_params;            // Does nothing but shut up a compiler warning
-    myStepper.setSpeed(60);
+    myStepper.setSpeed(160);
 
     //  set PWMA and PWMB to VCC 
     digitalWrite(PWMA,HIGH);
@@ -79,7 +79,7 @@ void steppermotor (void* p_params)
       {
         Serial << "Now turning on stepper motor" << endl;
         myStepper.step(STEPS_PER_REV);
-        // delay(1000);
+        delay(1000);
         // solenoid_on.put(true);
       }
             // Delay task by 10 ms since task began
