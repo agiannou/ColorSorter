@@ -48,8 +48,6 @@ const int8_t STEPS_PER_REV = 200;
 // setting up the input pins for the motor driver
 Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
 
-
-
 void steppermotor (void* p_params)
 {
   Serial << "Now initializing stepper task" << endl;
@@ -120,6 +118,7 @@ void solenoid (void* p_params)
         // if share is off, turn off solenoid
         else
         {
+          Serial << "Solenoid off" << endl;
           digitalWrite(Ain_sol, LOW);
         }
             // Delay task by 50 ms since task began
