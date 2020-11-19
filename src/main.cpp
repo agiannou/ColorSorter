@@ -10,6 +10,7 @@
 #include <PrintStream.h>
 #include <Stepper.h>
 #include "Adafruit_TCS34725.h"
+#include "taskshare.h"
 
 
 
