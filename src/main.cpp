@@ -79,8 +79,8 @@ void steppermotor (void* p_params)
       {
         Serial << "Now turning on stepper motor" << endl;
         myStepper.step(STEPS_PER_REV);
-        delay(1000);
-        solenoid_on.put(true);
+        // delay(1000);
+        // solenoid_on.put(true);
       }
             // Delay task by 10 ms since task began
         vTaskDelayUntil (&xLastWakeTime, stepper_period);
