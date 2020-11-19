@@ -44,6 +44,7 @@ const int8_t Ain_sol = PB6;
 
 //  set PWMA and PWMB to VCC 
 
+
 // setting the up the stepper number of stepper motor steps
 const int8_t STEPS_PER_REV = 200;
 
@@ -88,6 +89,10 @@ void steppermotor (void* p_params)
 {
   (void)p_params;            // Does nothing but shut up a compiler warning
     myStepper.setSpeed(60);
+
+    //  set PWMA and PWMB to VCC 
+    digitalWrite(PWMA,HIGH);
+    digitalWrite(PWMB,HIGH);
 
     const TickType_t stepper_period = 10;         // RTOS ticks (ms) between runs
 
