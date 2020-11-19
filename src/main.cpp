@@ -42,7 +42,6 @@ const int8_t Bin1 = PA8;
 // solenoid pins
 const int8_t Ain_sol = PB6;
 
-
 //  set PWMA and PWMB to VCC 
 
 // setting the up the stepper number of stepper motor steps
@@ -96,8 +95,19 @@ void steppermotor (void* p_params)
     // It will be used to run the task at precise intervals
     TickType_t xLastWakeTime = xTaskGetTickCount();
 
+    //init variable to pull from share
+    bool sol_on;
+
     for(;;)
     {
+      // check solenoid share
+      solenoid_on.get(sol_on);
+      // if share is off, drive stepper motor by designated number of steps and set share to on.
+      if (sol_on == false)
+      {
+        myStepper.step(STEPS_PER_REV);
+        solenoid_on.put(true);
+      }
             // Delay task by 10 ms since task began
         vTaskDelayUntil (&xLastWakeTime, stepper_period);
     }
