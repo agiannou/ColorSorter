@@ -16,14 +16,18 @@
 #include "Adafruit_TCS34725.h"
 #include "taskshare.h"
 
+// share for communicating between solenoid/stepper tasks
+Share<bool> solenoid_on ("Power");
+
 /** Ain pins are:
  *  D6=>PWM_A (PB10)
- *  D3=>Ain2  (PB3)
+ *  D3=>Ain2 (PB3)
  *  D13=>Ain1 (PA5)
  *  Bin pins are:
  *  D2=>PWM_B (PA10)
  *  D8=>Bin2  (PA9)
  *  D7=>Bin1  (PA8)
+ *  D10=>Ain_sol (PB6)
  */
 // inputs for coil A on stepper motor 
 const int8_t PWMA = PB10;
@@ -34,6 +38,10 @@ const int8_t Ain1 = PA5;
 const int8_t PWMB = PA10;
 const int8_t Bin2 = PA9;
 const int8_t Bin1 = PA8;
+
+// solenoid pins
+const int8_t Ain_sol = PB6;
+
 
 //  set PWMA and PWMB to VCC 
 
@@ -53,8 +61,25 @@ void solenoid (void* p_params)
     // It will be used to run the task at precise intervals
     TickType_t xLastWakeTime = xTaskGetTickCount();
 
+    // init variable to pull from share
+    bool sol_on;
+
     for(;;)
     {
+        // check solenoid share
+        solenoid_on.get(sol_on);
+        // if share is on, turn on solenoid, leave on for 1 sec, then turn off
+        if (sol_on == true)
+        {
+          digitalWrite(Ain_sol, HIGH);
+          delay(1000);
+          solenoid_on.put(false);
+        }
+        // if share is off, turn off solenoid
+        else
+        {
+          digitalWrite(Ain_sol, LOW);
+        }
             // Delay task by 50 ms since task began
         vTaskDelayUntil (&xLastWakeTime, solenoid_period);
     }
