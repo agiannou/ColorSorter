@@ -44,18 +44,35 @@ Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
 void solenoid (void* p_params)
 {
   (void)p_params;            // Does nothing but shut up a compiler warning
+  
+    const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
 
+    // Initialise the xLastWakeTime variable with the current time.
+    // It will be used to run the task at precise intervals
+    TickType_t xLastWakeTime = xTaskGetTickCount();
+
+    for(;;)
+    {
+            // Delay task by 50 ms since task began
+        vTaskDelayUntil (&xLastWakeTime, solenoid_period);
+    }
 }
 
 void steppermotor (void* p_params)
 {
   (void)p_params;            // Does nothing but shut up a compiler warning
 
-    const TickType_t sim_period = 10;         // RTOS ticks (ms) between runs
+    const TickType_t stepper_period = 10;         // RTOS ticks (ms) between runs
 
     // Initialise the xLastWakeTime variable with the current time.
     // It will be used to run the task at precise intervals
     TickType_t xLastWakeTime = xTaskGetTickCount();
+
+    for(;;)
+    {
+            // Delay task by 10 ms since task began
+        vTaskDelayUntil (&xLastWakeTime, stepper_period);
+    }
 }
 
 void setup() {
