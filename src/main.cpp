@@ -43,7 +43,7 @@ const int8_t Bin1 = PA8;
 const int8_t Ain_sol = PB6;
 
 // setting the up the number of stepper motor steps
-#define STEPS_PER_REV = 200
+#define STEPS_PER_REV 200
 
 // setting up the input pins for the motor driver
 Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
