@@ -52,7 +52,7 @@ void steppermotor (void* p_params)
 {
   Serial << "Now initializing stepper task" << endl;
   (void)p_params;            // Does nothing but shut up a compiler warning
-    myStepper.setSpeed(60);
+    myStepper.setSpeed(160);
 
     //  set PWMA and PWMB to VCC 
     digitalWrite(PWMA,HIGH);
