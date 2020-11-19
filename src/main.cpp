@@ -43,7 +43,7 @@ const int8_t Bin1 = PA8;
 const int8_t Ain_sol = PB6;
 
 // setting the up the number of stepper motor steps
-#define STEPS_PER_REV = 200
+#define STEPS_PER_REV 200
 
 // setting up the input pins for the motor driver
 Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
@@ -79,7 +79,7 @@ void steppermotor (void* p_params)
       {
         Serial << "Now turning on stepper motor" << endl;
         myStepper.step(STEPS_PER_REV);
-        // delay(1000);
+        delay(1000);
         // solenoid_on.put(true);
       }
             // Delay task by 10 ms since task began
