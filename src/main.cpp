@@ -87,44 +87,44 @@ void steppermotor (void* p_params)
     }
 }
 
-void solenoid (void* p_params)
-{
-  Serial << "Now initializing solenoid task" << endl;
-  (void)p_params;            // Does nothing but shut up a compiler warning
+// void solenoid (void* p_params)
+// {
+//   Serial << "Now initializing solenoid task" << endl;
+//   (void)p_params;            // Does nothing but shut up a compiler warning
   
-    const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
+//     const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
 
-    // Initialise the xLastWakeTime variable with the current time.
-    // It will be used to run the task at precise intervals
-    TickType_t xLastWakeTime = xTaskGetTickCount();
+//     // Initialise the xLastWakeTime variable with the current time.
+//     // It will be used to run the task at precise intervals
+//     TickType_t xLastWakeTime = xTaskGetTickCount();
 
-    // init variable to pull from share
-    bool sol_on;
+//     // init variable to pull from share
+//     bool sol_on;
 
-    for(;;)
-    {
-        Serial << "Now entering solenoid task loop" << endl;
-        delay(500); // delay just in case, to save terminal
-        // check solenoid share
-        solenoid_on.get(sol_on);
-        // if share is on, turn on solenoid, leave on for 1 sec, then turn off
-        if (sol_on == true)
-        {
-          Serial << "Now turning on solenoid" << endl;
-          digitalWrite(Ain_sol, HIGH);
-          delay(1000);
-          solenoid_on.put(false);
-        }
-        // if share is off, turn off solenoid
-        else
-        {
-          Serial << "Solenoid off" << endl;
-          digitalWrite(Ain_sol, LOW);
-        }
-            // Delay task by 50 ms since task began
-        vTaskDelayUntil (&xLastWakeTime, solenoid_period);
-    }
-}
+//     for(;;)
+//     {
+//         Serial << "Now entering solenoid task loop" << endl;
+//         delay(500); // delay just in case, to save terminal
+//         // check solenoid share
+//         solenoid_on.get(sol_on);
+//         // if share is on, turn on solenoid, leave on for 1 sec, then turn off
+//         if (sol_on == true)
+//         {
+//           Serial << "Now turning on solenoid" << endl;
+//           digitalWrite(Ain_sol, HIGH);
+//           delay(1000);
+//           solenoid_on.put(false);
+//         }
+//         // if share is off, turn off solenoid
+//         else
+//         {
+//           Serial << "Solenoid off" << endl;
+//           digitalWrite(Ain_sol, LOW);
+//         }
+//             // Delay task by 50 ms since task began
+//         vTaskDelayUntil (&xLastWakeTime, solenoid_period);
+//     }
+// }
 
 void setup() {
 // Start the serial port, wait a short time, then say hello. Use the
@@ -141,13 +141,13 @@ void setup() {
                  2,                               // Priority
                  NULL);
 
-    // Create a task for solenoid
-    xTaskCreate (solenoid,
-                 "Solenoid task",                     // Name for printouts
-                 1024,                            // Stack size
-                 NULL,                            // Parameters for task fn.
-                 4,                               // Priority
-                 NULL);                           // Task handle
+    // // Create a task for solenoid
+    // xTaskCreate (solenoid,
+    //              "Solenoid task",                     // Name for printouts
+    //              1024,                            // Stack size
+    //              NULL,                            // Parameters for task fn.
+    //              4,                               // Priority
+    //              NULL);                           // Task handle
 
 
 
