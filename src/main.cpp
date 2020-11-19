@@ -20,11 +20,18 @@
 void solenoid (void* p_params)
 {
   (void)p_params;            // Does nothing but shut up a compiler warning
+
 }
 
 void steppermotor (void* p_params)
 {
   (void)p_params;            // Does nothing but shut up a compiler warning
+
+    const TickType_t sim_period = 10;         // RTOS ticks (ms) between runs
+
+    // Initialise the xLastWakeTime variable with the current time.
+    // It will be used to run the task at precise intervals
+    TickType_t xLastWakeTime = xTaskGetTickCount();
 }
 
 void setup() {
@@ -39,7 +46,7 @@ void setup() {
                  "Solenoid task",                     // Name for printouts
                  1024,                            // Stack size
                  NULL,                            // Parameters for task fn.
-                 1,                               // Priority
+                 4,                               // Priority
                  NULL);                           // Task handle
 
     // Create a task which prints a more agreeable message
@@ -47,7 +54,7 @@ void setup() {
                  "Stepper motor task",
                  1024,                            // Stack size
                  NULL,
-                 5,                               // Priority
+                 2,                               // Priority
                  NULL);
 
     // If using an STM32, we need to call the scheduler startup function now;
