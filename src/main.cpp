@@ -48,43 +48,7 @@ const int8_t STEPS_PER_REV = 200;
 // setting up the input pins for the motor driver
 Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
 
-void solenoid (void* p_params)
-{
-  Serial << "Now initializing solenoid task" << endl;
-  (void)p_params;            // Does nothing but shut up a compiler warning
-  
-    const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
 
-    // Initialise the xLastWakeTime variable with the current time.
-    // It will be used to run the task at precise intervals
-    TickType_t xLastWakeTime = xTaskGetTickCount();
-
-    // init variable to pull from share
-    bool sol_on;
-
-    for(;;)
-    {
-        Serial << "Now entering solenoid task loop" << endl;
-        delay(500); // delay just in case, to save terminal
-        // check solenoid share
-        solenoid_on.get(sol_on);
-        // if share is on, turn on solenoid, leave on for 1 sec, then turn off
-        if (sol_on == true)
-        {
-          Serial << "Now turning on solenoid" << endl;
-          digitalWrite(Ain_sol, HIGH);
-          delay(1000);
-          solenoid_on.put(false);
-        }
-        // if share is off, turn off solenoid
-        else
-        {
-          digitalWrite(Ain_sol, LOW);
-        }
-            // Delay task by 50 ms since task began
-        vTaskDelayUntil (&xLastWakeTime, solenoid_period);
-    }
-}
 
 void steppermotor (void* p_params)
 {
@@ -125,6 +89,44 @@ void steppermotor (void* p_params)
     }
 }
 
+void solenoid (void* p_params)
+{
+  Serial << "Now initializing solenoid task" << endl;
+  (void)p_params;            // Does nothing but shut up a compiler warning
+  
+    const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
+
+    // Initialise the xLastWakeTime variable with the current time.
+    // It will be used to run the task at precise intervals
+    TickType_t xLastWakeTime = xTaskGetTickCount();
+
+    // init variable to pull from share
+    bool sol_on;
+
+    for(;;)
+    {
+        Serial << "Now entering solenoid task loop" << endl;
+        delay(500); // delay just in case, to save terminal
+        // check solenoid share
+        solenoid_on.get(sol_on);
+        // if share is on, turn on solenoid, leave on for 1 sec, then turn off
+        if (sol_on == true)
+        {
+          Serial << "Now turning on solenoid" << endl;
+          digitalWrite(Ain_sol, HIGH);
+          delay(1000);
+          solenoid_on.put(false);
+        }
+        // if share is off, turn off solenoid
+        else
+        {
+          digitalWrite(Ain_sol, LOW);
+        }
+            // Delay task by 50 ms since task began
+        vTaskDelayUntil (&xLastWakeTime, solenoid_period);
+    }
+}
+
 void setup() {
 // Start the serial port, wait a short time, then say hello. Use the
     // non-RTOS delay() function because the RTOS hasn't been started yet
@@ -155,5 +157,6 @@ void setup() {
     #endif
 }
 
-void loop() {
+void loop()
+{
 }
