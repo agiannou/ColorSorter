@@ -136,11 +136,11 @@ void setup() {
         // Create a task which prints a more agreeable message
     xTaskCreate (steppermotor,
                  "Stepper motor task",
-                 1024,                            // Stack size
+                 2048,                            // Stack size
                  NULL,
                  2,                               // Priority
                  NULL);
-                 
+
     // Create a task for solenoid
     xTaskCreate (solenoid,
                  "Solenoid task",                     // Name for printouts
