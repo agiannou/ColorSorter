@@ -17,7 +17,7 @@
 #include "taskshare.h"
 
 // share for communicating between solenoid/stepper tasks
-Share<bool> solenoid_on ("Power");
+Share<bool> solenoid_on ("Solenoid on/off switch");
 
 /** Ain pins are:
  *  D6=>PWM_A (PB10)
@@ -50,6 +50,7 @@ Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
 
 void solenoid (void* p_params)
 {
+  Serial << "Now initializing solenoid task" << endl;
   (void)p_params;            // Does nothing but shut up a compiler warning
   
     const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
@@ -63,11 +64,14 @@ void solenoid (void* p_params)
 
     for(;;)
     {
+        Serial << "Now entering solenoid task loop" << endl;
+        delay(500); // delay just in case, to save terminal
         // check solenoid share
         solenoid_on.get(sol_on);
         // if share is on, turn on solenoid, leave on for 1 sec, then turn off
         if (sol_on == true)
         {
+          Serial << "Now turning on solenoid" << endl;
           digitalWrite(Ain_sol, HIGH);
           delay(1000);
           solenoid_on.put(false);
@@ -84,6 +88,7 @@ void solenoid (void* p_params)
 
 void steppermotor (void* p_params)
 {
+  Serial << "Now initializing stepper task" << endl;
   (void)p_params;            // Does nothing but shut up a compiler warning
     myStepper.setSpeed(60);
 
@@ -103,11 +108,14 @@ void steppermotor (void* p_params)
 
     for(;;)
     {
+      Serial << "Now entering stepper task loop" << endl;
+      delay(500); // delay just in case, to save terminal
       // check solenoid share
       solenoid_on.get(sol_on);
       // if share is off, drive stepper motor by designated number of steps and set share to on.
       if (sol_on == false)
       {
+        Serial << "Now turning on stepper motor" << endl;
         myStepper.step(STEPS_PER_REV);
         delay(1000);
         solenoid_on.put(true);
