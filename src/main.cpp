@@ -65,7 +65,7 @@ void steppermotor (void* p_params)
     TickType_t xLastWakeTime = xTaskGetTickCount();
 
     // init variable to pull from share and init share as off
-    bool sol_on;
+    bool sol_on_1;
     solenoid_on.put(false);
 
     for(;;)
@@ -73,9 +73,9 @@ void steppermotor (void* p_params)
       Serial << "Now entering stepper task loop" << endl;
       delay(500); // delay just in case, to save terminal
       // check solenoid share
-      solenoid_on.get(sol_on);
+      solenoid_on.get(sol_on_1);
       // if share is off, drive stepper motor by designated number of steps and set share to on.
-      if (sol_on == false)
+      if (sol_on_1== false)
       {
         Serial << "Now turning on stepper motor" << endl;
         myStepper.step(STEPS_PER_REV);
@@ -133,7 +133,15 @@ void setup() {
     delay (5000);
     Serial << endl << endl << "Starting Color Sorter Demonstration Program" << endl;
 
-    // Create a task ffor solenoid
+        // Create a task which prints a more agreeable message
+    xTaskCreate (steppermotor,
+                 "Stepper motor task",
+                 1024,                            // Stack size
+                 NULL,
+                 2,                               // Priority
+                 NULL);
+                 
+    // Create a task for solenoid
     xTaskCreate (solenoid,
                  "Solenoid task",                     // Name for printouts
                  1024,                            // Stack size
@@ -141,13 +149,7 @@ void setup() {
                  4,                               // Priority
                  NULL);                           // Task handle
 
-    // Create a task which prints a more agreeable message
-    xTaskCreate (steppermotor,
-                 "Stepper motor task",
-                 1024,                            // Stack size
-                 NULL,
-                 2,                               // Priority
-                 NULL);
+
 
     // If using an STM32, we need to call the scheduler startup function now;
     // if using an ESP32, it has already been called for us
