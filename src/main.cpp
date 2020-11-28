@@ -19,6 +19,26 @@
 // share for communicating between solenoid/stepper tasks
 Share<bool> solenoid_on ("Solenoid on/off switch");
 
+// example of what is still needed
+/** @brief   Read an integer from a serial device, echoing input and blocking.
+ *  @details This function reads an integer which is typed by a user into a
+ *           serial device. It uses the Arduino function @c readBytes(), which
+ *           blocks the task which calls this function until a character is
+ *           read. When any character is received, it is echoed through the
+ *           serial port so the user can see what was typed. Only decimal
+ *           integers are supported; negative integers beginning with a single
+ *           @c - sign or positive ones with a @c + will work. 
+ * 
+ *           @b NOTE: The serial device must have its timeout set to a very
+ *           long time, or this function will malfunction. A recommended call:
+ *           @code
+ *           Serial.setTimeout (0xFFFFFFFF);
+ *           @endcode
+ *           Assuming that the serial port named @c Serial is being used.
+ *  @param   stream The serial device such as @c Serial used to communicate
+ */
+
+
 /** Ain pins are:
  *  D6=>PWM_A (PB10)
  *  D3=>Ain2 (PB3)
@@ -59,8 +79,8 @@ Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
 
 void steppermotor (void* p_params)
 {
-  Serial << "Now initializing stepper task" << endl;
-  (void)p_params;            // Does nothing but shut up a compiler warning
+    Serial << "Now initializing stepper task" << endl;
+    (void)p_params;            // Does nothing but shut up a compiler warning
     myStepper.setSpeed(60);
 
     //  set PWMA and PWMB to VCC 
@@ -91,49 +111,50 @@ void steppermotor (void* p_params)
         delay(1000);
         // solenoid_on.put(true);
       }
-            // Delay task by 10 ms since task began
+        // Delay task by 10 ms since task began
         vTaskDelayUntil (&xLastWakeTime, stepper_period);
     }
 }
 
-// void solenoid (void* p_params)
-// {
-//   Serial << "Now initializing solenoid task" << endl;
-//   (void)p_params;            // Does nothing but shut up a compiler warning
+
+ void solenoid (void* p_params)
+ {
+   Serial << "Now initializing solenoid task" << endl;
+   (void)p_params;            // Does nothing but shut up a compiler warning
   
-//     const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
+     const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
 
-//     // Initialise the xLastWakeTime variable with the current time.
-//     // It will be used to run the task at precise intervals
-//     TickType_t xLastWakeTime = xTaskGetTickCount();
+     // Initialise the xLastWakeTime variable with the current time.
+     // It will be used to run the task at precise intervals
+     TickType_t xLastWakeTime = xTaskGetTickCount();
 
-//     // init variable to pull from share
-//     bool sol_on;
-
-//     for(;;)
-//     {
-//         Serial << "Now entering solenoid task loop" << endl;
-//         delay(500); // delay just in case, to save terminal
-//         // check solenoid share
-//         solenoid_on.get(sol_on);
-//         // if share is on, turn on solenoid, leave on for 1 sec, then turn off
-//         if (sol_on == true)
-//         {
-//           Serial << "Now turning on solenoid" << endl;
-//           digitalWrite(Ain_sol, HIGH);
-//           delay(1000);
-//           solenoid_on.put(false);
-//         }
-//         // if share is off, turn off solenoid
-//         else
-//         {
-//           Serial << "Solenoid off" << endl;
-//           digitalWrite(Ain_sol, LOW);
-//         }
-//             // Delay task by 50 ms since task began
-//         vTaskDelayUntil (&xLastWakeTime, solenoid_period);
-//     }
-// }
+     // init variable to pull from share
+     bool sol_on=true;
+    
+     for(;;)
+     {
+         Serial << "Now entering solenoid task loop" << endl;
+         delay(500); // delay just in case, to save terminal
+         // check solenoid share
+         solenoid_on.get(sol_on);
+         // if share is on, turn on solenoid, leave on for 1 sec, then turn off
+         if (sol_on == true)
+         {
+           Serial << "Now turning on solenoid" << endl;
+           digitalWrite(Ain_sol, HIGH);
+           delay(1000);
+           solenoid_on.put(false);
+         }
+         // if share is off, turn off solenoid
+         else
+         {
+           Serial << "Solenoid off" << endl;
+           digitalWrite(Ain_sol, LOW);
+         }
+             // Delay task by 50 ms since task began
+         vTaskDelayUntil (&xLastWakeTime, solenoid_period);
+     }
+ }
 
 void setup() {
 // Start the serial port, wait a short time, then say hello. Use the
@@ -142,7 +163,7 @@ void setup() {
     delay (5000);
     Serial << endl << endl << "Starting Color Sorter Demonstration Program" << endl;
 
-        // Create a task which prints a more agreeable message
+    // Create a task which prints a more agreeable message
     xTaskCreate (steppermotor,
                  "Stepper motor task",
                  2048,                            // Stack size
@@ -150,13 +171,13 @@ void setup() {
                  2,                               // Priority
                  NULL);
 
-    // // Create a task for solenoid
-    // xTaskCreate (solenoid,
-    //              "Solenoid task",                     // Name for printouts
-    //              1024,                            // Stack size
-    //              NULL,                            // Parameters for task fn.
-    //              4,                               // Priority
-    //              NULL);                           // Task handle
+     // Create a task for solenoid
+     xTaskCreate (solenoid,
+                  "Solenoid task",                     // Name for printouts
+                  2048,                            // Stack size
+                  NULL,                            // Parameters for task fn.
+                  4,                               // Priority
+                  NULL);                           // Task handle
 
 
 
