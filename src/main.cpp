@@ -47,8 +47,9 @@ const int8_t Bin1 = PA8;
  *  BIN_2=>D5()
  *  PWMB=>D4()
  */
- 
 const int8_t Ain_sol = PB6;
+
+
 
 // setting the up the number of stepper motor steps
 #define STEPS_PER_REV 200
