@@ -39,7 +39,15 @@ const int8_t PWMB = PA10;
 const int8_t Bin2 = PA9;
 const int8_t Bin1 = PA8;
 
-// solenoid pins
+/** TB6612FNG motor driver input pins
+ *  PWMA=>D12()
+ *  AIN_2=>D11()
+ *  AIN_1=>D10()
+ *  BIN_1=>D09()
+ *  BIN_2=>D5()
+ *  PWMB=>D4()
+ */
+ 
 const int8_t Ain_sol = PB6;
 
 // setting the up the number of stepper motor steps
