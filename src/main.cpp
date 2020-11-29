@@ -81,7 +81,6 @@ Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
 
 void steppermotor (void* p_params)
 {
-    Serial << "Now initializing stepper task" << endl;
     (void)p_params;            // Does nothing but shut up a compiler warning
     myStepper.setSpeed(60);
 
@@ -89,7 +88,7 @@ void steppermotor (void* p_params)
     digitalWrite(PWMA,HIGH);
     digitalWrite(PWMB,HIGH);
 
-    const TickType_t stepper_period = 500;         // RTOS ticks (ms) between runs
+    const TickType_t stepper_period = 10;         // RTOS ticks (ms) between runs
 
     // Initialise the xLastWakeTime variable with the current time.
     // It will be used to run the task at precise intervals
@@ -101,20 +100,17 @@ void steppermotor (void* p_params)
 
     for(;;)
     {
-      Serial << "Now entering stepper task loop" << endl;
       // check solenoid share
       solenoid_on.get(sol_on_1);
       // if share is off, drive stepper motor by designated number of steps and set share to on.
       if (sol_on_1== false)
       {
-        Serial << "Now turning on stepper motor" << endl;
         myStepper.step(STEPS_PER_REV);
-        delay(5000);
+        delay(1000);
         solenoid_on.put(true);
       }
       else
       {
-        Serial << "stepper motor is off" << endl;
       }
       
         // Delay task by 10 ms since task began
@@ -125,10 +121,9 @@ void steppermotor (void* p_params)
 
 void solenoid (void* p_params)
  {
-   Serial << "Now initializing solenoid task" << endl;
    (void)p_params;            // Does nothing but shut up a compiler warning
   
-     const TickType_t solenoid_period = 2500;         // RTOS ticks (ms) between runs
+     const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
 
      // Initialise the xLastWakeTime variable with the current time.
      // It will be used to run the task at precise intervals
@@ -138,22 +133,19 @@ void solenoid (void* p_params)
      bool sol_on;
      for(;;)
      {
-         Serial << "Now entering solenoid task loop" << endl;
          // check solenoid share
          solenoid_on.get(sol_on);
          
          // if share is on, turn on solenoid, leave on for 1 sec, then turn off
          if (sol_on == 1)
          {
-           Serial << "Now turning on solenoid" << endl;
            digitalWrite(Ain_sol, HIGH);
-           delay(5000);
+           delay(1000);
            solenoid_on.put(false);
          }
          // if share is off, turn off solenoid
          else
          {
-           Serial << "Solenoid off" << endl;
            digitalWrite(Ain_sol, LOW);
          }
              // Delay task by 50 ms since task began
