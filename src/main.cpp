@@ -4,8 +4,10 @@
  * @author Alexander Giannousis, Ali Yazdkhasti, Raul Gonzalez
  * @date   2020-Nov-16 Created file
  * @date   2020-Nov-18 Added tasks
+ * @date   2020-Nov-27 Tried fixing solenoid task
+ * @date   2020-Nov-28 Finally fixed solenoid task
+ * @date   2020-Nov-29 
  */
-
 
 #include <Arduino.h>
 #include <PrintStream.h>
@@ -87,7 +89,7 @@ void steppermotor (void* p_params)
     digitalWrite(PWMA,HIGH);
     digitalWrite(PWMB,HIGH);
 
-    const TickType_t stepper_period = 10;         // RTOS ticks (ms) between runs
+    const TickType_t stepper_period = 500;         // RTOS ticks (ms) between runs
 
     // Initialise the xLastWakeTime variable with the current time.
     // It will be used to run the task at precise intervals
@@ -100,7 +102,6 @@ void steppermotor (void* p_params)
     for(;;)
     {
       Serial << "Now entering stepper task loop" << endl;
-      delay(500); // delay just in case, to save terminal
       // check solenoid share
       solenoid_on.get(sol_on_1);
       // if share is off, drive stepper motor by designated number of steps and set share to on.
@@ -108,41 +109,45 @@ void steppermotor (void* p_params)
       {
         Serial << "Now turning on stepper motor" << endl;
         myStepper.step(STEPS_PER_REV);
-        delay(1000);
-        // solenoid_on.put(true);
+        delay(5000);
+        solenoid_on.put(true);
       }
+      else
+      {
+        Serial << "stepper motor is off" << endl;
+      }
+      
         // Delay task by 10 ms since task began
         vTaskDelayUntil (&xLastWakeTime, stepper_period);
     }
 }
 
 
- void solenoid (void* p_params)
+void solenoid (void* p_params)
  {
    Serial << "Now initializing solenoid task" << endl;
    (void)p_params;            // Does nothing but shut up a compiler warning
   
-     const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
+     const TickType_t solenoid_period = 2500;         // RTOS ticks (ms) between runs
 
      // Initialise the xLastWakeTime variable with the current time.
      // It will be used to run the task at precise intervals
      TickType_t xLastWakeTime = xTaskGetTickCount();
 
      // init variable to pull from share
-     bool sol_on=true;
-    
+     bool sol_on;
      for(;;)
      {
          Serial << "Now entering solenoid task loop" << endl;
-         delay(500); // delay just in case, to save terminal
          // check solenoid share
          solenoid_on.get(sol_on);
+         
          // if share is on, turn on solenoid, leave on for 1 sec, then turn off
-         if (sol_on == true)
+         if (sol_on == 1)
          {
            Serial << "Now turning on solenoid" << endl;
            digitalWrite(Ain_sol, HIGH);
-           delay(1000);
+           delay(5000);
            solenoid_on.put(false);
          }
          // if share is off, turn off solenoid
@@ -153,7 +158,7 @@ void steppermotor (void* p_params)
          }
              // Delay task by 50 ms since task began
          vTaskDelayUntil (&xLastWakeTime, solenoid_period);
-     }
+    }
  }
 
 void setup() {
@@ -163,21 +168,20 @@ void setup() {
     delay (5000);
     Serial << endl << endl << "Starting Color Sorter Demonstration Program" << endl;
 
-    // Create a task which prints a more agreeable message
-    xTaskCreate (steppermotor,
-                 "Stepper motor task",
-                 2048,                            // Stack size
-                 NULL,
-                 2,                               // Priority
-                 NULL);
-
-     // Create a task for solenoid
+    //creating the accelerometer reading task
      xTaskCreate (solenoid,
-                  "Solenoid task",                     // Name for printouts
-                  2048,                            // Stack size
-                  NULL,                            // Parameters for task fn.
-                  4,                               // Priority
-                  NULL);                           // Task handle
+                 "Run solenoid",                     // Name for printouts
+                 1024,                            // Stack size
+                 (void*)(&Ain_sol),                            // Parameters for task fn.
+                 10,                               // Priority
+                 NULL);                           // Task handle
+    //creating the acceleration printing task
+     xTaskCreate (steppermotor,
+                 "Run stepper motor",                  // Name for printouts
+                 2048,                            // Stack size
+                 (void*)(&PWMA, &PWMB, &Ain1, &Ain2, &Bin1, &Bin2), // Parameters for task fn.
+                 5,                               // Priority
+                 NULL);                           // Task handle
 
 
 
