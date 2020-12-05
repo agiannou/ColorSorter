@@ -51,40 +51,36 @@ Adafruit_TCS34725 my_ColorSensor;
  *  @param   Bin2 input pin for the B side of the motor driver
  * 
  */
-
-
-/** Ain pins are:
- *  D6=>PWM_A (PB10)
- *  D3=>Ain2 (PB3)
- *  D13=>Ain1 (PA5)
- *  Bin pins are:
- *  D2=>PWM_B (PA10)
- *  D8=>Bin2  (PA9)
- *  D7=>Bin1  (PA8)
- *  D10=>Ain_sol (PB6)
- */
-// inputs for coil A on stepper motor 
-const int8_t PWMA = PB10;
-const int8_t Ain2 = PB3;
-const int8_t Ain1 = PA5;
-
-// inputs for coil B on stepper motor
-const int8_t PWMB = PA10;
-const int8_t Bin2 = PA9;
-const int8_t Bin1 = PA8;
-
-
-// setting the up the number of stepper motor steps
-#define STEPS_PER_REV 200
-
-// setting up the input pins for the motor driver
-Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
-
 void steppermotor (void* p_params)
 {
     (void)p_params;            // Does nothing but shut up a compiler warning
     myStepper.setSpeed(60);
+    /** Ain pins are:
+     *  D6=>PWM_A (PB10)
+     *  D3=>Ain2 (PB3)
+     *  D13=>Ain1 (PA5)
+     *  Bin pins are:
+     *  D2=>PWM_B (PA10)
+     *  D8=>Bin2  (PA9)
+     *  D7=>Bin1  (PA8)
+     *  D10=>Ain_sol (PB6)
+     */
+    // inputs for coil A on stepper motor 
+    const int8_t PWMA = PB10;
+    const int8_t Ain2 = PB3;
+    const int8_t Ain1 = PA5;
 
+    // inputs for coil B on stepper motor
+    const int8_t PWMB = PA10;
+    const int8_t Bin2 = PA9;
+    const int8_t Bin1 = PA8;
+
+
+    // setting the up the number of stepper motor steps
+    #define STEPS_PER_REV 200
+
+    // setting up the input pins for the motor driver
+    Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
     //  set PWMA and PWMB to VCC 
     digitalWrite(PWMA,HIGH);
     digitalWrite(PWMB,HIGH);
@@ -136,24 +132,21 @@ void steppermotor (void* p_params)
  *  @param   Bin2 controls the 4th solenoid
  * 
  */
-
-/** TB6612FNG motor driver input pins
- *  PWMA=>D12()
- *  AIN_2=>D11()
- *  AIN_1=>D10()
- *  BIN_1=>D09()
- *  BIN_2=>D5()
- *  PWMB=>D4()
- */
-const int8_t Ain_sol = PB6;
-
-
 void solenoid (void* p_params)
  {
    (void)p_params;            // Does nothing but shut up a compiler warning
   
      const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
-
+     /** TB6612FNG motor driver input pins
+       *  PWMA=>D12()
+       *  AIN_2=>D11()
+       *  AIN_1=>D10()
+       *  BIN_1=>D09()
+       *  BIN_2=>D5()
+       *  PWMB=>D4()
+      */
+    const int8_t Ain_sol = PB6;
+      
      // Initialise the xLastWakeTime variable with the current time.
      // It will be used to run the task at precise intervals
      TickType_t xLastWakeTime = xTaskGetTickCount();
@@ -190,7 +183,6 @@ void solenoid (void* p_params)
  *  @param   r used to store a value of the red detected 
  *  @param   g used to store a value of the green detected 
  *  @param   b used to store a value of the blue detected 
-
  * 
  */
 void ColorSensor (void* p_params)
