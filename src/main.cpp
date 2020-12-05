@@ -116,19 +116,19 @@ void steppermotor (void* p_params)
 
 
      /** TB6612FNG motor driver input pins
-       *  PWMA=>D12()
-       *  AIN_2=>D11()
-       *  AIN_1=>D10()
-       *  BIN_1=>D09()
-       *  BIN_2=>D5()
-       *  PWMB=>D4()
+       *  PWMA=>D12(PA6)
+       *  AIN_2=>D11(PB6)
+       *  AIN_1=>D10(PA7)
+       *  BIN_1=>D09(PC7)
+       *  BIN_2=>D5(PB4)
+       *  PWMB=>D4(PB5)
       */
     const int8_t Ain1_sol = PB6;
-    const int8_t Ain2_sol  = ;
-    const int8_t Bin1_sol = ;
-    const int8_t Bin2_sol = ;
-    const int8_t PWMA_sol = ;
-    const int8_t PWMB_sol = ;
+    const int8_t Ain2_sol  = PA7;
+    const int8_t Bin1_sol = PC7;
+    const int8_t Bin2_sol = PB4;
+    const int8_t PWMA_sol = PA6;
+    const int8_t PWMB_sol = PB5;
 
 /** @brief   This code controls the solenoids to open and close
  *  @details The signal to open comes depending on what color the color sensor has 
