@@ -79,7 +79,7 @@ void steppermotor (void* p_params)
 {
     (void)p_params;            // Does nothing but shut up a compiler warning
     // setting the up the number of stepper motor steps
-    #define STEPS_PER_TURN 87.5
+    #define STEPS_PER_TURN 87
 
     // setting up the input pins for the motor driver
     Stepper myStepper(STEPS_PER_TURN,Ain2,Ain1,Bin1,Bin2);
@@ -96,6 +96,8 @@ void steppermotor (void* p_params)
     // init variable to pull from share and init share as off
     bool sol_on_1;
     turn_complete.put(false);
+    // make turns alternate (steps required is a non-integer)
+    bool turn = false;
 
     for(;;)
     {
@@ -104,9 +106,18 @@ void steppermotor (void* p_params)
       // if share is off, drive stepper motor by designated number of steps and set share to on.
       if (sol_on_1== false)
       {
+        if (turn == false)
+        {
         myStepper.step(STEPS_PER_TURN);
         delay(1000);
         turn_complete.put(true);
+        }
+        if (turn == true)
+        {
+        myStepper.step(88);
+        delay(1000);
+        turn_complete.put(true);
+        }
       }
       else
       {
