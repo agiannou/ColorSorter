@@ -154,7 +154,8 @@ void solenoid (void* p_params)
      // Initialise the xLastWakeTime variable with the current time.
      // It will be used to run the task at precise intervals
      TickType_t xLastWakeTime = xTaskGetTickCount();
-
+    digitalWrite(PWMA_sol,HIGH);
+    digitalWrite(PWMB_sol,HIGH);
      // init variable to pull from share
      bool sol_on;
      for(;;)
@@ -165,14 +166,14 @@ void solenoid (void* p_params)
          // if share is on, turn on solenoid, leave on for 1 sec, then turn off
          if (sol_on == 1)
          {
-           digitalWrite(Ain_sol, HIGH);
+           digitalWrite(Ain1_sol, HIGH);
            delay(1000);
            solenoid_on.put(false);
          }
          // if share is off, turn off solenoid
          else
          {
-           digitalWrite(Ain_sol, LOW);
+           digitalWrite(Ain1_sol, LOW);
          }
              // Delay task by 50 ms since task began
          vTaskDelayUntil (&xLastWakeTime, solenoid_period);
