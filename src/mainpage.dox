@@ -1,16 +1,14 @@
 /** @file mainpage.dox
- *  @author JR Ridgely
- *  @copyright (c) 2020 by JR Ridgely, licensed CC-BY-NC-SA 3.0
- *  @mainpage
+ *  @author Alexander Giannousis, Ali Yazdkhasti, Raul Gonzalez
+ *  @copyright 
+ *  @mainpage COLOR SORTER
  *
  *  @section s_intro Introduction
- *  This is an example main page which describes an ME507 example project.
- *  The project tests an STM32L476RG processor on a Nucleo-64 prototyping
- *  board. VSCode is used to program the module, using PlatformIO and the
- *  Arduino environment. Arduino for this processor happens to have FreeRTOS
- *  conveniently included, and the most basic use of the RTOS is demonstrated.
- *  Active and passive voice are mixed up in order to demonstrate slightly
- *  poor documentation practices. 
+ *  This is the color sorting project created for the ME 507 Mechatronics 
+ *  class. The purpose of this project is to sort different colored objects.
+ *  The brains of this project is the STM32-L476RG nucleo board. This project 
+ *  also used a nema 17 stepper motor with TB6612FNG motor driver chip and a 
+ *  TCS34725 RGB color senor. 
  *
  *
  */
