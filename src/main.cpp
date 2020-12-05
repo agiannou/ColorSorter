@@ -124,7 +124,7 @@ void steppermotor (void* p_params)
        *  PWMB=>D4(PB5)
       */
     const int8_t Ain1_sol = PB6;
-    const int8_t Ain2_sol  = PA7;
+    const int8_t Ain2_sol = PA7;
     const int8_t Bin1_sol = PC7;
     const int8_t Bin2_sol = PB4;
     const int8_t PWMA_sol = PA6;
