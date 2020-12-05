@@ -6,7 +6,7 @@
  * @date   2020-Nov-18 Added tasks
  * @date   2020-Nov-27 Tried fixing solenoid task
  * @date   2020-Nov-28 Finally fixed solenoid task
- * @date   2020-Nov-29 
+ * @date   2020-Nov-29 Added Color Sensor task
  */
 //
 #include <Arduino.h>
@@ -20,6 +20,10 @@
 
 // share for communicating between solenoid/stepper tasks
 Share<bool> solenoid_on ("Solenoid on/off switch");
+
+// Create an object for the color sensor class
+Adafruit_TCS34725 my_ColorSensor;
+
 
 // example of what is still needed
 /** @brief   Read an integer from a serial device, echoing input and blocking.
@@ -153,6 +157,24 @@ void solenoid (void* p_params)
     }
  }
 
+void ColorSensor (void* p_params)
+{
+  (void)p_params;            // Does nothing but shut up a compiler warning
+  // init variables for reading rgb colors
+  float r;
+  float g;
+  float b;
+
+  for(;;)
+  {
+    // get color and print individual RGB values
+    my_ColorSensor.getRGB(&r, &g, &b);
+    Serial << "R: " << r << endl << "G: " << g << "B: " << endl;
+    delay(500);
+  }
+}
+
+
 void setup() {
 // Start the serial port, wait a short time, then say hello. Use the
     // non-RTOS delay() function because the RTOS hasn't been started yet
@@ -160,20 +182,28 @@ void setup() {
     delay (5000);
     Serial << endl << endl << "Starting Color Sorter Demonstration Program" << endl;
 
-    //creating the accelerometer reading task
+    //creating the solenoid task
      xTaskCreate (solenoid,
                  "Run solenoid",                     // Name for printouts
                  1024,                            // Stack size
                  (void*)(&Ain_sol),                            // Parameters for task fn.
                  10,                               // Priority
                  NULL);                           // Task handle
-    //creating the acceleration printing task
+    //creating the stepper motor task
      xTaskCreate (steppermotor,
                  "Run stepper motor",                  // Name for printouts
                  2048,                            // Stack size
                  (void*)(&PWMA, &PWMB, &Ain1, &Ain2, &Bin1, &Bin2), // Parameters for task fn.
                  5,                               // Priority
                  NULL);                           // Task handle
+    //creating the color sensor task
+     xTaskCreate (ColorSensor,
+                 "Get data from color sensor",     // Name for printouts
+                 1024,                            // Stack size
+                 NULL,                            // Parameters for task fn.
+                 5,                               // Priority
+                 NULL);                           // Task handle
+
 
 
 
