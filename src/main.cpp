@@ -35,26 +35,6 @@ Adafruit_TCS34725 my_ColorSensor;
 
 
 
-/** @brief   Function used to control the stepper motor
- *  @details The input for the stepper motor will come from the color sensor. Depending 
- *           on which color is registered the stepper motor will turn until it has 
- *           reached the correct spot and stop
- *           
- *          
- *  @param   PWMA the input pin to the H-bridge chip for pulse modulation for the A side 
- *  @param   PWMB the input pin to the H-bridge chip for pulse modulation for the A side 
- *           Because the we are using a stepper motor we do not need the PWM signal pins 
- *           so they can be set to high
- *  @param   Ain2 input pin for the A side of the motor driver
- *  @param   Ain1 input pin for the A side of the motor driver
- *  @param   Bin1 input pin for the B side of the motor driver
- *  @param   Bin2 input pin for the B side of the motor driver
- * 
- */
-void steppermotor (void* p_params)
-{
-    (void)p_params;            // Does nothing but shut up a compiler warning
-    myStepper.setSpeed(60);
     /** Ain pins are:
      *  D6=>PWM_A (PB10)
      *  D3=>Ain2 (PB3)
@@ -75,7 +55,26 @@ void steppermotor (void* p_params)
     const int8_t Bin2 = PA9;
     const int8_t Bin1 = PA8;
 
+/** @brief   Function used to control the stepper motor
+ *  @details The input for the stepper motor will come from the color sensor. Depending 
+ *           on which color is registered the stepper motor will turn until it has 
+ *           reached the correct spot and stop
+ *           
+ *          
+ *  @param   PWMA the input pin to the H-bridge chip for pulse modulation for the A side 
+ *  @param   PWMB the input pin to the H-bridge chip for pulse modulation for the A side 
+ *           Because the we are using a stepper motor we do not need the PWM signal pins 
+ *           so they can be set to high
+ *  @param   Ain2 input pin for the A side of the motor driver
+ *  @param   Ain1 input pin for the A side of the motor driver
+ *  @param   Bin1 input pin for the B side of the motor driver
+ *  @param   Bin2 input pin for the B side of the motor driver
+ * 
+ */
 
+void steppermotor (void* p_params)
+{
+    (void)p_params;            // Does nothing but shut up a compiler warning
     // setting the up the number of stepper motor steps
     #define STEPS_PER_REV 200
 
@@ -84,7 +83,7 @@ void steppermotor (void* p_params)
     //  set PWMA and PWMB to VCC 
     digitalWrite(PWMA,HIGH);
     digitalWrite(PWMB,HIGH);
-
+    myStepper.setSpeed(60);
     const TickType_t stepper_period = 10;         // RTOS ticks (ms) between runs
 
     // Initialise the xLastWakeTime variable with the current time.
@@ -116,6 +115,21 @@ void steppermotor (void* p_params)
 }
 
 
+     /** TB6612FNG motor driver input pins
+       *  PWMA=>D12()
+       *  AIN_2=>D11()
+       *  AIN_1=>D10()
+       *  BIN_1=>D09()
+       *  BIN_2=>D5()
+       *  PWMB=>D4()
+      */
+    const int8_t Ain1_sol = PB6;
+    const int8_t Ain2_sol  = ;
+    const int8_t Bin1_sol = ;
+    const int8_t Bin2_sol = ;
+    const int8_t PWMA_sol = ;
+    const int8_t PWMB_sol = ;
+
 /** @brief   This code controls the solenoids to open and close
  *  @details The signal to open comes depending on what color the color sensor has 
  *           registered. The solenoid will wait until the stepper motor has turned 
@@ -136,17 +150,7 @@ void solenoid (void* p_params)
  {
    (void)p_params;            // Does nothing but shut up a compiler warning
   
-     const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs
-     /** TB6612FNG motor driver input pins
-       *  PWMA=>D12()
-       *  AIN_2=>D11()
-       *  AIN_1=>D10()
-       *  BIN_1=>D09()
-       *  BIN_2=>D5()
-       *  PWMB=>D4()
-      */
-    const int8_t Ain_sol = PB6;
-      
+     const TickType_t solenoid_period = 50;         // RTOS ticks (ms) between runs  
      // Initialise the xLastWakeTime variable with the current time.
      // It will be used to run the task at precise intervals
      TickType_t xLastWakeTime = xTaskGetTickCount();
