@@ -218,7 +218,7 @@ void setup() {
      xTaskCreate (solenoid,
                  "Run solenoid",                     // Name for printouts
                  1024,                            // Stack size
-                 (void*)(&Ain_sol),                            // Parameters for task fn.
+                 (void*)(&PWMA_sol, &PWMB_sol, &Ain1_sol, &Ain2_sol, &Bin1_sol, &Bin2_sol), // Parameters for task fn.
                  10,                               // Priority
                  NULL);                           // Task handle
     //creating the stepper motor task
