@@ -26,11 +26,11 @@
 #include <Stepper.h>
 #include "Adafruit_TCS34725.h"
 #include "taskshare.h"
-#include "taskqueue.h"
+//#include "taskqueue.h"
 
 // share for communicating between solenoid/stepper tasks
 Share<bool> turn_complete ("Indicator that stepper motor turn is complete");
-Queue<uint8_t> Color (10, "Color queue");
+//Queue<uint8_t> Color (10, "Color queue");
 
 // Create an object for the color sensor class
 Adafruit_TCS34725 my_ColorSensor;
