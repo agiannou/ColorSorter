@@ -26,9 +26,11 @@
 #include <Stepper.h>
 #include "Adafruit_TCS34725.h"
 #include "taskshare.h"
+#include "taskqueue.h"
 
 // share for communicating between solenoid/stepper tasks
-Share<bool> solenoid_on ("Solenoid on/off switch");
+Share<bool> turn_complete ("Indicator that stepper motor turn is complete");
+Queue<uint8_t> Color (10, "Color queue");
 
 // Create an object for the color sensor class
 Adafruit_TCS34725 my_ColorSensor;
@@ -93,18 +95,18 @@ void steppermotor (void* p_params)
 
     // init variable to pull from share and init share as off
     bool sol_on_1;
-    solenoid_on.put(false);
+    turn_complete.put(false);
 
     for(;;)
     {
       // check solenoid share
-      solenoid_on.get(sol_on_1);
+      turn_complete.get(sol_on_1);
       // if share is off, drive stepper motor by designated number of steps and set share to on.
       if (sol_on_1== false)
       {
         myStepper.step(STEPS_PER_REV);
         delay(1000);
-        solenoid_on.put(true);
+        turn_complete.put(true);
       }
       else
       {
@@ -163,14 +165,14 @@ void solenoid (void* p_params)
      for(;;)
      {
          // check solenoid share
-         solenoid_on.get(sol_on);
+         turn_complete.get(sol_on);
          
          // if share is on, turn on solenoid, leave on for 1 sec, then turn off
          if (sol_on == 1)
          {
            digitalWrite(Ain1_sol, HIGH);
            delay(1000);
-           solenoid_on.put(false);
+           turn_complete.put(false);
          }
          // if share is off, turn off solenoid
          else
