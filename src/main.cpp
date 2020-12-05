@@ -1,12 +1,12 @@
 /** @file main.cpp
  *  @brief   This is the main file for the color sorter project for ME 507.
  *           The objective of this function is to detect the color balls on a turn table 
- *           and sort them out in 3 seperatre piles. 
+ *           and sort them out in 3 seperate piles. 
  *  @details This functions reads the color of a ball on the a turn table and 
- *           sends the color of the ball back to the nucleo board using the SDA and 
+ *           sends the color of the ball back to the Nucleo board using the SDA and 
  *           SCL pins. Once the color of the ball is recived the motor is then sent a 
  *           signal to turn to the correct postion based on the color of the ball.
- *           To make thing easier the turn table was split into 4 sections such that the 
+ *           To make things easier, the turn table was split into 4 sections such that the 
  *           motor will only be moving in 90 degree increments in order to get to the correct 
  *           location.
  * 
