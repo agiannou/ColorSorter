@@ -79,7 +79,7 @@ void steppermotor (void* p_params)
 {
     (void)p_params;            // Does nothing but shut up a compiler warning
     // setting the up the number of stepper motor steps
-    #define STEPS_PER_TURN 50
+    #define STEPS_PER_TURN 88
 
     // setting up the input pins for the motor driver
     Stepper myStepper(STEPS_PER_TURN,Ain2,Ain1,Bin1,Bin2);
