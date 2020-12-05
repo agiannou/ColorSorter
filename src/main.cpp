@@ -1,5 +1,14 @@
 /** @file main.cpp
- *    This is the main file for the color sorter project for ME 507.
+ *  @brief   This is the main file for the color sorter project for ME 507.
+ *           The objective of this function is to detect the color balls on a turn table 
+ *           and sort them out in 3 seperatre piles. 
+ *  @details This functions reads the color of a ball on the a turn table and 
+ *           sends the color of the ball back to the nucleo board using the SDA and 
+ *           SCL pins. Once the color of the ball is recived the motor is then sent a 
+ *           signal to turn to the correct postion based on the color of the ball.
+ *           To make thing easier the turn table was split into 4 sections such that the 
+ *           motor will only be moving in 90 degree increments in order to get to the correct 
+ *           location.
  * 
  * @author Alexander Giannousis, Ali Yazdkhasti, Raul Gonzalez
  * @date   2020-Nov-16 Created file
@@ -25,23 +34,22 @@ Share<bool> solenoid_on ("Solenoid on/off switch");
 Adafruit_TCS34725 my_ColorSensor;
 
 
-// example of what is still needed
-/** @brief   Read an integer from a serial device, echoing input and blocking.
- *  @details This function reads an integer which is typed by a user into a
- *           serial device. It uses the Arduino function @c readBytes(), which
- *           blocks the task which calls this function until a character is
- *           read. When any character is received, it is echoed through the
- *           serial port so the user can see what was typed. Only decimal
- *           integers are supported; negative integers beginning with a single
- *           @c - sign or positive ones with a @c + will work. 
+
+/** @brief   Function used to control the stepper motor
+ *  @details The input for the stepper motor will come from the color sensor. Depending 
+ *           on which color is registered the stepper motor will turn until it has 
+ *           reached the correct spot and stop
+ *           
+ *          
+ *  @param   PWMA the input pin to the H-bridge chip for pulse modulation for the A side 
+ *  @param   PWMB the input pin to the H-bridge chip for pulse modulation for the A side 
+ *           Because the we are using a stepper motor we do not need the PWM signal pins 
+ *           so they can be set to high
+ *  @param   Ain2 input pin for the A side of the motor driver
+ *  @param   Ain1 input pin for the A side of the motor driver
+ *  @param   Bin1 input pin for the B side of the motor driver
+ *  @param   Bin2 input pin for the B side of the motor driver
  * 
- *           @b NOTE: The serial device must have its timeout set to a very
- *           long time, or this function will malfunction. A recommended call:
- *           @code
- *           Serial.setTimeout (0xFFFFFFFF);
- *           @endcode
- *           Assuming that the serial port named @c Serial is being used.
- *  @param   stream The serial device such as @c Serial used to communicate
  */
 
 
@@ -64,17 +72,6 @@ const int8_t Ain1 = PA5;
 const int8_t PWMB = PA10;
 const int8_t Bin2 = PA9;
 const int8_t Bin1 = PA8;
-
-/** TB6612FNG motor driver input pins
- *  PWMA=>D12()
- *  AIN_2=>D11()
- *  AIN_1=>D10()
- *  BIN_1=>D09()
- *  BIN_2=>D5()
- *  PWMB=>D4()
- */
-const int8_t Ain_sol = PB6;
-
 
 
 // setting the up the number of stepper motor steps
@@ -123,6 +120,34 @@ void steppermotor (void* p_params)
 }
 
 
+/** @brief   This code controls the solenoids to open and close
+ *  @details The signal to open comes depending on what color the color sensor has 
+ *           registered. The solenoid will wait until the stepper motor has turned 
+ *           to the correct location before opening up. (*NOTE: do not keep solenoid 
+ *           on for prolonged peroids of time this will burn it out)
+ *          
+ *  @param   PWMA the input pin to the H-bridge chip for pulse modulation for the A side 
+ *  @param   PWMB the input pin to the H-bridge chip for pulse modulation for the A side 
+ *           Because the we are using not using a DC motor we have no use for this, but 
+ *           the according to the datasheet they must be set to high.
+ *  @param   Ain2 controls the 1st solenoid 
+ *  @param   Ain1 controls the 2nd solenoid
+ *  @param   Bin1 controls the 3rd solenoid
+ *  @param   Bin2 controls the 4th solenoid
+ * 
+ */
+
+/** TB6612FNG motor driver input pins
+ *  PWMA=>D12()
+ *  AIN_2=>D11()
+ *  AIN_1=>D10()
+ *  BIN_1=>D09()
+ *  BIN_2=>D5()
+ *  PWMB=>D4()
+ */
+const int8_t Ain_sol = PB6;
+
+
 void solenoid (void* p_params)
  {
    (void)p_params;            // Does nothing but shut up a compiler warning
@@ -157,6 +182,17 @@ void solenoid (void* p_params)
     }
  }
 
+/** @brief   This function reads the color sensor 
+ *  @details This function reads the color sensor and send a signal 
+ *           to the stepper motor to turn until it has reached the 
+ *           correct location.            
+ *          
+ *  @param   r used to store a value of the red detected 
+ *  @param   g used to store a value of the green detected 
+ *  @param   b used to store a value of the blue detected 
+
+ * 
+ */
 void ColorSensor (void* p_params)
 {
   (void)p_params;            // Does nothing but shut up a compiler warning
