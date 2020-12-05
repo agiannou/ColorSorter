@@ -79,10 +79,10 @@ void steppermotor (void* p_params)
 {
     (void)p_params;            // Does nothing but shut up a compiler warning
     // setting the up the number of stepper motor steps
-    #define STEPS_PER_REV 200
+    #define STEPS_PER_TURN 50
 
     // setting up the input pins for the motor driver
-    Stepper myStepper(STEPS_PER_REV,Ain2,Ain1,Bin1,Bin2);
+    Stepper myStepper(STEPS_PER_TURN,Ain2,Ain1,Bin1,Bin2);
     //  set PWMA and PWMB to VCC 
     digitalWrite(PWMA,HIGH);
     digitalWrite(PWMB,HIGH);
@@ -104,7 +104,7 @@ void steppermotor (void* p_params)
       // if share is off, drive stepper motor by designated number of steps and set share to on.
       if (sol_on_1== false)
       {
-        myStepper.step(STEPS_PER_REV);
+        myStepper.step(STEPS_PER_TURN);
         delay(1000);
         turn_complete.put(true);
       }
