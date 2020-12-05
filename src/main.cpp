@@ -35,7 +35,7 @@ Adafruit_TCS34725 my_ColorSensor;
 
 
 
-    /** Ain pins are:
+    /* Ain pins are:
      *  D6=>PWM_A (PB10)
      *  D3=>Ain2 (PB3)
      *  D13=>Ain1 (PA5)
@@ -115,7 +115,7 @@ void steppermotor (void* p_params)
 }
 
 
-     /** TB6612FNG motor driver input pins
+     /* TB6612FNG motor driver input pins
        *  PWMA=>D12(PA6)
        *  AIN_2=>D11(PB6)
        *  AIN_1=>D10(PA7)
