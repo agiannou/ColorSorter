@@ -62,7 +62,8 @@ Adafruit_TCS34725 my_ColorSensor;
  *           
  *          
  *  @param   PWMA the input pin to the H-bridge chip for pulse modulation for the A side 
- *  @param   PWMB the input pin to the H-bridge chip for pulse modulation for the A side 
+ *  @param   PWMB the input pin to the H-bridge chip for pulse modulation for the A side
+ * 
  *           Because the we are using a stepper motor we do not need the PWM signal pins 
  *           so they can be set to high
  *  @param   Ain2 input pin for the A side of the motor driver
@@ -138,6 +139,7 @@ void steppermotor (void* p_params)
  *          
  *  @param   PWMA the input pin to the H-bridge chip for pulse modulation for the A side 
  *  @param   PWMB the input pin to the H-bridge chip for pulse modulation for the A side 
+ * 
  *           Because the we are using not using a DC motor we have no use for this, but 
  *           the according to the datasheet they must be set to high.
  *  @param   Ain2 controls the 1st solenoid 
