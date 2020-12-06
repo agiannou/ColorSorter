@@ -217,7 +217,7 @@ void ColorSensor (void* p_params)
   {
     // get color and print individual RGB values
     my_ColorSensor.getRGB(&r, &g, &b);
-    Serial << "R: " << r << "\r" << "G: " << g << "\r" << "B: " << b << "\r" << endl;
+    Serial << "R: " << r << endl << "G: " << g << endl << "B: " << b << "\r" << endl;
     delay(500);
   }
 }
